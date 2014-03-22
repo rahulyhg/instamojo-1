@@ -1,27 +1,29 @@
-=== Instamojo ===
+=== Instamojo button ===
 Contributors: rishimukherjee, aniketpant, instamojo
 Donate link: https://www.instamojo.com
-Tags: marketplace, ecommerce, selling
+Tags: commerce, e-commerce, ecommerce, online store, sell digital downloads, sell online, shop, store, wordpress ecommerce, WordPress shopping cart, sell event tickets, sell subscriptions, sell memberships, sell physical goods, payments, easy payments, payments button, widget
 Requires at least: 3.0.1
 Tested up to: 3.4
 Stable tag: 4.3
 License: MIT
 License URI: http://opensource.org/licenses/MIT
 
-Here is a short description of the plugin.  This should be no more than 150 characters.  No markup here.
+Sell & collect payments instantly for almost anything -- directly from your WordPress website.
 
 == Description ==
 
-Instamojo democratizes online selling by allowing you to sell across social, mobile & web with just a link.
+Instamojo democratizes & facilitates 2-party payments through a link over mobile (SMS, Whatsapp), social (Facebook, Twitter) & web (email, blogs).
 
-We are an extremely lightweight e-commerce framework that lets you sell directly to your audience from your email, blogs, websites and even through social networks like facebook, twitter, pinterest, youtube etc by sharing an unique branded shortlink (www.imojo.in/demo) while we take care of hosting, bandwidth, payment processing and more.
+For the end-merchant, Instamojo is an extremely lightweight e-commerce framework that lets them collect payments directly from their audience by just sharing a [branded shortlink](https://www.imojo.in/demo) while we take care of payment processing, hosting, dispute resolution and more.
+
+Moreover, Instamojo requires no coding, no maintenance, no setup, no installation and goes easy on pocket (5% + 30¢ per transaction) for simple & hassle-free payment collection on-the-go.
 
 *Features & Benefits:*
 
-- Doesn't require any prior coding or technical knowledge to sell online with Instamojo wordpress plugin.
+- Doesn't require any prior coding or technical knowledge to sell online with Instamojo WordPress plugin.
 - Zero maintenance from your end.
 - No setup or fuss of any kind.
-- 1-click installation of buy button on your wordpress website and blogs.
+- 1-click installation of buy button on your WordPress website and blogs.
 - Simple honest pricing - 5% + 30¢ per transaction for USD payment & flat 5% for INR based payments (for Indian customers)
 - Fantastic 1-page payment checkout experience for superb conversion.
 
