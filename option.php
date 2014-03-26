@@ -33,18 +33,8 @@ class InstamojoSettingsPage
       <?php screen_icon(); ?>
       <h2>Instamojo Options</h2>
       <form method="post" action="options.php">
-      <?php settings_fields('instamojo-credentials'); ?>
-      <?php do_settings_sections('instamojo-credentials'); ?>
-      <table class="form-table">
-        <tr valign="top">
-          <th scope="row">Username</th>
-          <td><input type="text" name="instamojo-username" value="<?php echo get_option('instamojo-username'); ?>"></input></td>
-        </tr>
-        <tr valign="top">
-          <th scope="row">Password</th>
-          <td><input type="text" name="instamojo-password"></input></td>
-        </tr>
-      </table>
+      <?php settings_fields('instamojo-credentials-group'); ?>
+      <?php do_settings_sections('instamojo-admin'); ?>
       <?php submit_button(); ?>
       </form>
     </div>
@@ -54,20 +44,9 @@ class InstamojoSettingsPage
   public function page_init()
   {
     register_setting(
+      'instamojo-credentials-group',
       'instamojo-credentials',
-      'instamojo-username',
       array($this, 'sanitize')
-    );
-
-    register_setting(
-      'instamojo-credentials',
-      'instamojo-password',
-      array($this, 'sanitize')
-    );
-
-    register_setting(
-      'instamojo-credentials',
-      'instamojo-auth-token'
     );
 
     add_settings_section(
@@ -88,7 +67,7 @@ class InstamojoSettingsPage
     add_settings_field(
       'instamojo-password',
       'Password',
-      array($this, 'password\_callback'),
+      array($this, 'password_callback'),
       'instamojo-admin',
       'credentials'
     );
@@ -120,27 +99,18 @@ class InstamojoSettingsPage
 
   public function username_callback()
   {
-    printf(
-      '<input type="text" id="instamojo-username" name="instamojo_credentials[username]" value="%s" />',
-      isset($this->options['username']) ? esc_attr($this->options['username']) : ''
-    );
+    $username = $this->_options['username'];
+    echo '<input type="text" name="instamojo-credentials[username]" value="'.$username.'" />';
   }
 
   public function password_callback()
   {
-    printf(
-      '<input type="text" id="instamojo-password" name="instamojo_credentials[password]" value="%s" />',
-      isset($this->options['password']) ? esc_attr($this->options['password']) : ''
-    );
+    echo '<input type="password" name="instamojo-credentials[password]" />';
   }
 
 }
 
-if (!current_user_can('manage_options'))
-{
-  wp_die(__('You do not have sufficient permissions to access this page.'));
-}
-else
+if (is_admin())
 {
   $my_settings_page = new InstamojoSettingsPage();
 }
