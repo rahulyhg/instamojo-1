@@ -31,6 +31,7 @@ function instamojo_activation_hook()
 function instamojo_plugin_loaded()
 {
   require_once(PLUGIN_DIR.'shortcode.php');
+  require_once(PLUGIN_DIR.'option.php');
   add_action('widgets_init', 'instamojo_widgets_init');
 }
 
