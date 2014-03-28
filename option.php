@@ -1,17 +1,22 @@
 <?php
 
+define('ENCRYPTION_KEY', '!@#$%^&*');
+define('APPLICATION_ID', 'acd73b5ac8ccd76be2dafc46e082d415');
+
+include_once(__DIR__.'/lib/Instamojo.php');
+
 /**
  * Instamojo Settings Page
  */
 class InstamojoSettingsPage
 {
-
   private $_options;
 
   public function __construct()
   {
     add_action('admin_menu', array($this, 'add_plugin_page'));
     add_action('admin_init', array($this, 'page_init'));
+    add_action('updated_option', array($this, 'auth_token'));
   }
 
   public function add_plugin_page()
@@ -27,25 +32,18 @@ class InstamojoSettingsPage
 
   public function create_admin_page()
   {
-    $this->_options = get_option('instamojo-credentials');
+    $this->_options = get_option('instamojo_credentials');
+    if (isset($this->_options['auth_token']))
+    {
+      echo '<div class="update-nag"><p>You have already authenticated your account with us. If you wish to switch accounts then enter your details again.</p></div>';
+    }
     ?>
     <div class="wrap">
-      <?php screen_icon(); ?>
       <h2>Instamojo Options</h2>
       <form method="post" action="options.php">
-      <?php settings_fields('instamojo-credentials'); ?>
-      <?php do_settings_sections('instamojo-credentials'); ?>
-      <table class="form-table">
-        <tr valign="top">
-          <th scope="row">Username</th>
-          <td><input type="text" name="instamojo-username" value="<?php echo get_option('instamojo-username'); ?>"></input></td>
-        </tr>
-        <tr valign="top">
-          <th scope="row">Password</th>
-          <td><input type="text" name="instamojo-password"></input></td>
-        </tr>
-      </table>
-      <?php submit_button(); ?>
+      <?php settings_fields('instamojo_credentials-group'); ?>
+      <?php do_settings_sections('instamojo-admin'); ?>
+      <?php submit_button('Authenticate'); ?>
       </form>
     </div>
     <?php
@@ -54,20 +52,9 @@ class InstamojoSettingsPage
   public function page_init()
   {
     register_setting(
-      'instamojo-credentials',
-      'instamojo-username',
+      'instamojo_credentials-group',
+      'instamojo_credentials',
       array($this, 'sanitize')
-    );
-
-    register_setting(
-      'instamojo-credentials',
-      'instamojo-password',
-      array($this, 'sanitize')
-    );
-
-    register_setting(
-      'instamojo-credentials',
-      'instamojo-auth-token'
     );
 
     add_settings_section(
@@ -88,7 +75,7 @@ class InstamojoSettingsPage
     add_settings_field(
       'instamojo-password',
       'Password',
-      array($this, 'password\_callback'),
+      array($this, 'password_callback'),
       'instamojo-admin',
       'credentials'
     );
@@ -105,7 +92,14 @@ class InstamojoSettingsPage
     $new_input = array();
 
     if(isset($input['username']))
+    {
       $new_input['username'] = sanitize_text_field($input['username']);
+    }
+
+    if(isset($input['password']))
+    {
+      $new_input['password'] = $input['password'];
+    }
 
     return $new_input;
   }
@@ -115,32 +109,37 @@ class InstamojoSettingsPage
    */
   public function print_section_info()
   {
-    print 'Enter your settings below:';
+    echo '<p>Enter your login credentials below:</p>';
   }
 
   public function username_callback()
   {
-    printf(
-      '<input type="text" id="instamojo-username" name="instamojo_credentials[username]" value="%s" />',
-      isset($this->options['username']) ? esc_attr($this->options['username']) : ''
-    );
+    echo '<input type="text" name="instamojo_credentials[username]" />';
   }
 
   public function password_callback()
   {
-    printf(
-      '<input type="text" id="instamojo-password" name="instamojo_credentials[password]" value="%s" />',
-      isset($this->options['password']) ? esc_attr($this->options['password']) : ''
-    );
+    echo '<input type="password" name="instamojo_credentials[password]" />';
+  }
+
+  public function auth_token()
+  {
+    $options = get_option('instamojo_credentials');
+    if (!$options['auth_token'])
+    {
+      $instance = new Instamojo($options['username'], $options['password'], APPLICATION_ID);
+      $auth = $instance->apiAuth();
+      $options['auth_token'] = $auth['token'];
+      unset($options['username']);
+      unset($options['password']);
+      update_option('instamojo_credentials', $options);
+      return $this;
+    }
   }
 
 }
 
-if (!current_user_can('manage_options'))
-{
-  wp_die(__('You do not have sufficient permissions to access this page.'));
-}
-else
+if (is_admin())
 {
   $my_settings_page = new InstamojoSettingsPage();
 }
