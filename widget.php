@@ -4,13 +4,15 @@
  * Instamojo Widget.
  * It extends the WordPress Widget class.
  */
-class instamojo_widget extends WP_Widget {
+class instamojo_widget extends WP_Widget
+{
 
 
   /**
    *  Default constructor.
    */
-  function instamojo_widget() {
+  function instamojo_widget()
+  {
     // Load any other optional scripts
     add_action('load-widgets.php', array(&$this, 'my_custom_load'));
 
@@ -32,7 +34,8 @@ class instamojo_widget extends WP_Widget {
   /**
    *  Called in the constructor.
    */
-  function my_custom_load() {
+  function my_custom_load()
+  {
 
   }
 
@@ -40,7 +43,8 @@ class instamojo_widget extends WP_Widget {
    *  Implements the widget() function as required by WordPress.
    *  This is responsible for how the widget looks in your WordPress site.
    */
-  function widget($args, $instance) {
+  function widget($args, $instance)
+  {
     wp_register_style('widgetcss', plugin_dir_url(__FILE__).'assets/css/imojo.css');
     wp_enqueue_style('widgetcss');
 
@@ -95,7 +99,8 @@ class instamojo_widget extends WP_Widget {
    *  Implements the update() function as required by WordPress.
    *  This works when you fill data in the widget form input from the WordPress admin.
    */
-  function update($new_instance, $old_instance) {
+  function update($new_instance, $old_instance)
+  {
     $instance = $old_instance;
     $instance['button_pos'] = strip_tags($new_instance['button_pos']);
     $instance['instamojo_url'] = strip_tags($new_instance['instamojo_url']);
@@ -127,7 +132,8 @@ class instamojo_widget extends WP_Widget {
    *  Implements the form() function as required by WordPress.
    *  This is responsible for how the form in the WordPress admin looks.
    */
-  function form($instance) {
+  function form($instance)
+  {
     $defaults = array('title' => '', 'instamojo_url' => '', 'button_pos' => 'top', 'button_style' => 'none', 'type' => true);
     $instance = wp_parse_args((array)$instance, $defaults);
     ?>
