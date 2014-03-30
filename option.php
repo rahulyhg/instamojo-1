@@ -66,6 +66,10 @@ class Instamojo_Settings_Page
     {
       echo '<div class="update-nag"><p>You have already authenticated your account with us. If you wish to switch accounts then enter your details again.</p></div>';
     }
+    else
+    {
+      echo '<div class="error"><p>Please authenticate your account first before you use the Instamojo Widget.</p></div>';
+    }
     ?>
     <div class="wrap">
       <h2><?php _e('Instamojo Options'); ?></h2>
@@ -93,14 +97,14 @@ class Instamojo_Settings_Page
           </tbody>
         </table>
         <p class="submit">
-          <input type="submit" name="submit" id="submit" class="button button-primary<?php if ($this->_options['auth_token']) echo '-disabled'; ?>" value="<?php _e('Authenticate'); ?>" />
+          <input type="submit" name="submit" id="submit" class="button button-primary" value="<?php _e('Authenticate'); ?>" />
         </p>
       </form>
 
       <h3><?php _e('Revoke Your Authentication Token'); ?></h3>
       <form method="post" action="" id="instamojo-token-revoke">
         <p class="submit">
-          <input type="submit" name="revoke" id="revoke-button" class="button button-secondary" value="<?php _e('Revoke Token'); ?>" />
+          <input type="submit" name="revoke" id="revoke-button" class="button button-secondary" value="<?php _e('Revoke Token'); ?>" <?php if (!$this->_options['auth_token']) echo 'disabled'; ?> />
         </p>
       </form>
     </div>
