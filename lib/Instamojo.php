@@ -499,7 +499,8 @@ class Instamojo {
    * @param string $file_path The path to the file in your computer.
    * @return JSON The JSON received from the request.
    */
-  private function getFileUploadJson($file_upload_url, $file_path){
+  private function getFileUploadJson($file_upload_url, $file_path)
+  {
     $file_path = realpath($file_path);
     $file_name = basename($file_path);
     $ch = curl_init();
@@ -548,7 +549,8 @@ class Instamojo {
     $file_upload_json = $this->getFileUploadJson($upload_url, $this->file_path);
     $data['file_upload_json'] = $file_upload_json;
 
-    if ($this->cover_path){
+    if ($this->cover_path)
+    {
       $upload_url = $this->getUploadUrl();
       $cover_upload_json = $this->getFileUploadJson($upload_url, $this->cover_path);
       $data['cover_image_json'] = $cover_upload_json;
@@ -574,7 +576,8 @@ class Instamojo {
    * @param string $slug The offer ID
    * @return JSON The response received from Instamojo API
    */
-  public function editOffer($slug){
+  public function editOffer($slug)
+  {
     $offer_array = $this->buildDataArray();
     $request = $this->apiRequest("offer/$slug/", 'PATCH', $data = $offer_array);
     $json = @json_decode($request['response'], true);
