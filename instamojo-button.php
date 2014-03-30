@@ -36,7 +36,7 @@ function instamojo_plugin_loaded()
 function instamojo_widgets_init()
 {
   include_once(PLUGIN_DIR.'widget.php');
-  register_widget('instamojo_widget');
+  register_widget('Instamojo_Widget');
 }
 
 ?>
