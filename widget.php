@@ -15,9 +15,6 @@ class Instamojo_Widget extends WP_Widget
    */
   function __construct()
   {
-    // Load any other optional scripts
-    add_action('load-widgets.php', array(&$this, 'my_custom_load'));
-
     // Name and class of widget
     $widget_options = array(
       'classname' => 'instamojo-widget',
@@ -31,14 +28,6 @@ class Instamojo_Widget extends WP_Widget
 
     // Initialize the widget.
     $this->WP_Widget('instamojo-widget', 'Instamojo',  $widget_options, $control_options);
-  }
-
-  /**
-   *  Called in the constructor.
-   */
-  function my_custom_load()
-  {
-
   }
 
   /**
@@ -146,4 +135,5 @@ class Instamojo_Widget extends WP_Widget
     }
   }
 }
+
 ?>
