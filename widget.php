@@ -47,8 +47,8 @@ class Instamojo_Widget extends WP_Widget
    */
   function widget($args, $instance)
   {
-    wp_register_style('widgetcss', plugin_dir_url(__FILE__).'assets/css/imojo.css');
-    wp_enqueue_style('widgetcss');
+    wp_register_script('widgetjs', 'https://d2xwmjc4uy2hr5.cloudfront.net/im-embed/im-embed.min.js', 'jquery', null, true);
+    wp_enqueue_script('widgetjs');
 
     $instamojo_credentials = get_option('instamojo_credentials');
 
@@ -68,11 +68,7 @@ class Instamojo_Widget extends WP_Widget
       echo $before_title.'My Instamojo Product'.$after_title;
     }
 
-    $button_html = '<div class="btn-container"><a href="https://www.instamojo.com/'.$instamojo_credentials['username'].'/'.$instance['instamojo_offer'].'" ';
-    if ($instance['button_style'] != 'none') {
-      $button_html .= 'class="im-checkout-btn btn--'.$instance['button_style'].'" ';
-    }
-    $button_html .= 'target="_blank">Buy Now</a></div>';
+    $button_html = '<a href="https://www.instamojo.com/'.$instamojo_credentials['username'].'/'.$instance['instamojo_offer'].'/" rel="im-checkout" data-style="'.$instance['button_style'].'" data-text="'.$instance['button_text'].'"></a>';
     echo $button_html;
     echo $after_widget;
   }
@@ -83,7 +79,7 @@ class Instamojo_Widget extends WP_Widget
    */
   function update($new_instance, $old_instance)
   {
-    $instance = $old_instance;
+    $instance = $new_instance;
     return $instance;
   }
 
@@ -93,7 +89,7 @@ class Instamojo_Widget extends WP_Widget
    */
   function form($instance)
   {
-    $defaults = array('title' => '', 'instamojo_offer' => '', 'button_style' => 'none');
+    $defaults = array('title' => '', 'button_text' => 'Checkout with Instamojo', 'instamojo_offer' => '', 'button_style' => 'none');
     $instance = wp_parse_args((array)$instance, $defaults);
 
     $instamojo_credentials = get_option('instamojo_credentials');
@@ -116,6 +112,12 @@ class Instamojo_Widget extends WP_Widget
         <input class="widefat" id="<?php echo $this->get_field_id('title');?>"
           name="<?php echo $this->get_field_name('title');?>"
           value="<?php echo $instance['title'];?>" />
+      </p>
+      <p>
+        <label for="<?php echo $this->get_field_id('button_text');?>">Button Text:</label>
+        <input class="widefat" id="<?php echo $this->get_field_id('button_text');?>"
+          name="<?php echo $this->get_field_name('button_text');?>"
+          value="<?php echo $instance['button_text'];?>" />
       </p>
       <p>
         <label for="<?php echo $this->get_field_id('instamojo_offer'); ?>">Instamojo Offer:</label>
