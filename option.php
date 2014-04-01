@@ -249,16 +249,6 @@ class Instamojo_Settings_Page
     );
   }
 
-  public function username_callback()
-  {
-    echo '<input type="text" name="instamojo_credentials[username]" />';
-  }
-
-  public function password_callback()
-  {
-    echo '<input type="password" name="instamojo_credentials[password]" />';
-  }
-
   private function revoke_token($auth_token)
   {
     $instance = new Instamojo(APPLICATION_ID);
