@@ -2,6 +2,9 @@
 
 /**
  * Shortcodes
+ * Use the shortcode generator from the Settings Page
+ *
+ * [instamojo offer="your-offer-slug" style="light" text="Checkout my offer"]
  */
 
 add_shortcode('instamojo', 'instamojo_button');

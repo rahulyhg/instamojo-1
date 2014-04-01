@@ -16,6 +16,7 @@ class Instamojo_Settings_Page
     add_action('admin_init', array($this, 'page_init'));
   }
 
+  // Responsible for adding the setting link to the WordPress menu list
   public function add_plugin_page()
   {
     add_options_page(
@@ -27,6 +28,7 @@ class Instamojo_Settings_Page
     );
   }
 
+  // Register all settings in here
   public function page_init()
   {
     register_setting(
@@ -35,10 +37,12 @@ class Instamojo_Settings_Page
     );
   }
 
+  // Handle all tabs for the settings page
   public function admin_tabs()
   {
     $current = isset($_GET['tab']) ? $_GET['tab'] : 'homepage';
 
+    // All tabs
     $tabs = array(
       'homepage'    => 'Instamojo Credentials',
       'shortcode'   => 'Shortcodes'
@@ -59,49 +63,67 @@ class Instamojo_Settings_Page
     <?php
   }
 
+  // The setting page
   public function create_admin_page()
   {
     $tab = isset($_GET['tab']) ? $_GET['tab'] : 'homepage';
 
+    // Retrieve all stored options from the database
     $this->_options = get_option('instamojo_credentials');
+
+    // Get the Auth Token from the options
     $auth_token = $this->_options['auth_token'];
 
+    // Check if the submit button was pressed and the form was submitted
     if (isset($_POST['submit']))
     {
       if (function_exists('current_user_can') && !current_user_can('manage_options'))
       {
+        // Die if current user cannot manage options
         die(__('Cheatin&#8217; uh?'));
       }
 
+      // Get the POST data out
       $instamojo_credentials = $_POST['instamojo_credentials'];
+
+      // Check if any data was sent
       if (isset($instamojo_credentials))
       {
         if (isset($auth_token))
         {
+          // Revoke token if Auth Token already exists
           $this->revoke_token($auth_token);
         }
+
+        // Create new instance to interact with Instamojo API
         $instance = new Instamojo(APPLICATION_ID, $instamojo_credentials['username'], $instamojo_credentials['password']);
         $auth = $instance->apiAuth();
         $instamojo_credentials['auth_token'] = $auth['token'];
         unset($instamojo_credentials['password']);
+
+        // Update options with Username and Auth Token
         update_option('instamojo_credentials', $instamojo_credentials);
       }
     }
 
+    // Check if request for revoking Auth Token was sent
     if (isset($_POST['revoke']))
     {
       if (isset($auth_token))
       {
+        // Revoke token if Auth Token already exists
         $this->revoke_token($auth_token);
       }
     }
 
     if ($auth_token)
     {
+      // Display notice if Auth Token is already stored
       echo '<div class="updated"><p>You have already authenticated your account with us. If you wish to switch accounts then enter your details again.</p></div>';
     }
     else
     {
+      // Display notice if Auth Token is already stored
       echo '<div class="error"><p>Please authenticate your account first before you use the Instamojo Widget.</p></div>';
     }
     ?>
@@ -149,7 +171,7 @@ class Instamojo_Settings_Page
           break;
 
         case 'shortcode':
-          // Create Instamojo instance for interacting with API
+          // Create new instance to interact with Instamojo API
           $instamojo = new Instamojo(APPLICATION_ID);
           $instamojo->setAuthToken($auth_token);
           $offerObject = $instamojo->listAllOffers();
@@ -212,6 +234,8 @@ class Instamojo_Settings_Page
         jQuery(document).ready(function() {
           generateShortcode();
 
+          // If offer, button style or the button text are changed
+          // generate shortcode and update the textarea
           jQuery('#instamojo_offer, #instamojo_style, #instamojo_text').change(function() {
             generateShortcode();
           });
@@ -227,11 +251,8 @@ class Instamojo_Settings_Page
             if (offer !== 'none') {
               output = output + ' offer="' + offer + '"';
             }
-
             output = output + ' style="' + style + '"';
-
             output = output + ' text="' + text + '"';
-
             output = output + ']';
 
             jQuery('#generatedShortcode').text(output);
@@ -249,6 +270,10 @@ class Instamojo_Settings_Page
     <?php
   }
 
+  /**
+   * Revoke Token
+   * @param string $auth_token Auth Token stored in options
+   */
   private function revoke_token($auth_token)
   {
     $instance = new Instamojo(APPLICATION_ID);
