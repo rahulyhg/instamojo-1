@@ -27,6 +27,14 @@ class Instamojo_Settings_Page
     );
   }
 
+  public function page_init()
+  {
+    register_setting(
+      'instamojo_credentials-group',
+      'instamojo_credentials'
+    );
+  }
+
   public function admin_tabs()
   {
     $current = isset($_GET['tab']) ? $_GET['tab'] : 'homepage';
@@ -239,14 +247,6 @@ class Instamojo_Settings_Page
       ?>
     </div>
     <?php
-  }
-
-  public function page_init()
-  {
-    register_setting(
-      'instamojo_credentials-group',
-      'instamojo_credentials'
-    );
   }
 
   private function revoke_token($auth_token)
