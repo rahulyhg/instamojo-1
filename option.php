@@ -90,7 +90,7 @@ class Instamojo_Settings_Page
 
     if ($auth_token)
     {
-      echo '<div class="update-nag"><p>You have already authenticated your account with us. If you wish to switch accounts then enter your details again.</p></div>';
+      echo '<div class="updated"><p>You have already authenticated your account with us. If you wish to switch accounts then enter your details again.</p></div>';
     }
     else
     {
