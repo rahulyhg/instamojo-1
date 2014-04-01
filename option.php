@@ -45,7 +45,7 @@ class Instamojo_Settings_Page
     // All tabs
     $tabs = array(
       'homepage'    => 'Instamojo Credentials',
-      'shortcode'   => 'Shortcodes'
+      'shortcode'   => 'Shortcode Generator'
     );
     ?>
     <h2><?php _e('Instamojo Options') ?></h2>
