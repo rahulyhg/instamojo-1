@@ -27,8 +27,34 @@ class Instamojo_Settings_Page
     );
   }
 
+  public function admin_tabs()
+  {
+    $current = isset($_GET['tab']) ? $_GET['tab'] : 'homepage';
+
+    $tabs = array(
+      'homepage'    => 'Instamojo Credentials',
+      'shortcode'   => 'Shortcodes'
+    );
+    ?>
+    <h2><?php _e('Instamojo Options') ?></h2>
+    <h3 class="nav-tab-wrapper">
+    <?php
+    foreach ($tabs as $tab => $name)
+    {
+      $class = ($tab == $current) ? ' nav-tab-active' : '';
+      ?>
+      <a class="nav-tab<?php echo $class; ?>" href="?page=instamojo&tab=<?php echo $tab; ?>"><?php _e($name); ?></a>
+    <?php
+    }
+    ?>
+    </h3>
+    <?php
+  }
+
   public function create_admin_page()
   {
+    $tab = isset($_GET['tab']) ? $_GET['tab'] : 'homepage';
+
     $this->_options = get_option('instamojo_credentials');
     $auth_token = $this->_options['auth_token'];
 
@@ -72,8 +98,12 @@ class Instamojo_Settings_Page
     }
     ?>
     <div class="wrap">
-      <h2><?php _e('Instamojo Options'); ?></h2>
-
+      <?php $this->admin_tabs(); ?>
+      <?php
+      switch ($tab)
+      {
+        case 'homepage':
+      ?>
       <h3><?php _e('Instamojo Credentials'); ?></h3>
       <form method="post" action="" id="instamojo-conf">
         <table class="form-table">
@@ -107,6 +137,106 @@ class Instamojo_Settings_Page
           <input type="submit" name="revoke" id="revoke-button" class="button button-secondary" value="<?php _e('Revoke Token'); ?>" <?php if (!$this->_options['auth_token']) echo 'disabled'; ?> />
         </p>
       </form>
+      <?php
+          break;
+
+        case 'shortcode':
+          // Create Instamojo instance for interacting with API
+          $instamojo = new Instamojo(APPLICATION_ID);
+          $instamojo->setAuthToken($auth_token);
+          $offerObject = $instamojo->listAllOffers();
+          $offers = $offerObject['offers'];
+      ?>
+      <form method="" action="" id="instamojo-shortcode-generate">
+        <table class="form-table">
+          <tbody>
+            <tr>
+              <th>
+                <label for="instamojo_offer"><?php _e('Instamojo Offer'); ?></label>
+              </th>
+              <td>
+                <select id="instamojo_offer" name="instamojo-offer">
+                  <option value="none" selected="selected">None</option>
+                <?php
+                  foreach ($offers as $offer) {
+                ?>
+                  <option value="<?php echo $offer['slug']; ?>"><?php echo $offer['title']; ?></option>
+                <?php
+                  }
+                ?>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <th>
+                <label for="instamojo_style"><?php _e('Button Style'); ?></label>
+              </th>
+              <td>
+                <select id="instamojo_style" name="button-style">
+                  <option value="none" selected="selected">None</option>
+                  <option value="light">Light</option>
+                  <option value="dark">Dark</option>
+                  <option value="flat">Flat Light</option>
+                  <option value="flat-dark">Flat Dark</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <th>
+                <label for="instamojo_text"><?php _e('Button Text'); ?></label>
+              </th>
+              <td>
+                <input type="text" id="instamojo_text" name="button-text" value="Checkout with Instamojo" />
+              </td>
+            </tr>
+            <tr>
+              <th>
+                <label for="instamojo_shortcode_output"><?php _e('Shortcode'); ?></label>
+              </th>
+              <td>
+                <textarea id="generatedShortcode" contenteditable></textarea>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </form>
+      <script type="text/javascript">
+        jQuery(document).ready(function() {
+          generateShortcode();
+
+          jQuery('#instamojo_offer, #instamojo_style, #instamojo_text').change(function() {
+            generateShortcode();
+          });
+
+          function generateShortcode() {
+            var $form = jQuery('#instamojo-shortcode-generate');
+            var offer = $form.find('#instamojo_offer').val();
+            var style = $form.find('#instamojo_style').val();
+            var text = $form.find('#instamojo_text').val();
+
+            var output = '[instamojo';
+
+            if (offer !== 'none') {
+              output = output + ' offer="' + offer + '"';
+            }
+
+            output = output + ' style="' + style + '"';
+
+            output = output + ' text="' + text + '"';
+
+            output = output + ']';
+
+            jQuery('#generatedShortcode').text(output);
+          }
+        });
+      </script>
+      <?php
+          break;
+
+        default:
+          break;
+      }
+      ?>
     </div>
     <?php
   }
