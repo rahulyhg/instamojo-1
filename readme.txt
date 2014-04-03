@@ -33,8 +33,9 @@ So get started and start selling ebooks, reports, music, software, templates, ev
 
 This section describes how to install the plugin and get it working.
 
-1. Upload `plugin-name.php` to the `/wp-content/plugins/` directory
-2. Activate the plugin through the 'Plugins' menu in WordPress
+1. Search for "Instamojo Button" on the WordPress Plugin directory or [download it](http://downloads.wordpress.org/plugin/instamojo.zip).
+2. Install the plugin.
+2. Activate the plugin through the 'Plugins' menu in WordPress.
 
 Once the plugin is installed and activated, you will be able to access a new menu under settings called Instamojo.
 
