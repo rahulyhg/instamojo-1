@@ -35,3 +35,11 @@ This section describes how to install the plugin and get it working.
 
 1. Upload `plugin-name.php` to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
+
+Once the plugin is installed and activated, you will be able to access a new menu under settings called Instamojo.
+
+**How to use the plugin?**
+
+1. First you need to authenticate yourself using your Instamojo username and password.
+2. You will now be able to use the widget provided with this plugin.
+3. In case you wish to use your button in a page/post, you can generate a shortcode from the Instamojo Settings and use the same.
