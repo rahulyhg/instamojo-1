@@ -14,6 +14,7 @@ class Instamojo_Settings_Page
   {
     add_action('admin_menu', array($this, 'add_plugin_page'));
     add_action('admin_init', array($this, 'page_init'));
+    add_action('admin_notices', array($this, 'plugin_notices'));
   }
 
   // Responsible for adding the setting link to the WordPress menu list
@@ -35,6 +36,21 @@ class Instamojo_Settings_Page
       'instamojo_credentials-group',
       'instamojo_credentials'
     );
+  }
+
+  public function plugin_notices()
+  {
+    // Retrieve all stored options from the database
+    $this->_options = get_option('instamojo_credentials');
+
+    // Get the Auth Token from the options
+    $auth_token = $this->_options['auth_token'];
+
+    if (!$auth_token)
+    {
+      // Display notice if Auth Token is already stored
+      echo '<div class="error"><p>Please authenticate your account first before you use the Instamojo Widget.</p></div>';
+    }
   }
 
   // Handle all tabs for the settings page
@@ -97,12 +113,19 @@ class Instamojo_Settings_Page
 
         // Create new instance to interact with Instamojo API
         $instance = new Instamojo(APPLICATION_ID, $instamojo_credentials['username'], $instamojo_credentials['password']);
-        $auth = $instance->apiAuth();
-        $instamojo_credentials['auth_token'] = $auth['token'];
-        unset($instamojo_credentials['password']);
+        try
+        {
+          $auth = $instance->apiAuth();
+          $instamojo_credentials['auth_token'] = $auth['token'];
+          unset($instamojo_credentials['password']);
 
-        // Update options with Username and Auth Token
-        update_option('instamojo_credentials', $instamojo_credentials);
+          // Update options with Username and Auth Token
+          update_option('instamojo_credentials', $instamojo_credentials);
+        }
+        catch (Exception $e)
+        {
+          wp_cache_set('message', 'Seems like the credentials you entered were incorrect. Please try authenticating again.', 'instamojo-plugin');
+        }
       }
     }
 
@@ -116,15 +139,18 @@ class Instamojo_Settings_Page
       }
     }
 
+    $message = wp_cache_get('message', 'instamojo-plugin');
+
+    if ($message)
+    {
+      echo '<div class="error"><p>'.$message.'</p></div>';
+      wp_cache_delete('message', 'instamojo-plugin');
+    }
+
     if ($auth_token)
     {
       // Display notice if Auth Token is already stored
       echo '<div class="updated"><p>You have already authenticated your account with us. If you wish to switch accounts then enter your details again.</p></div>';
-    }
-    else
-    {
-      // Display notice if Auth Token is already stored
-      echo '<div class="error"><p>Please authenticate your account first before you use the Instamojo Widget.</p></div>';
     }
     ?>
     <div class="wrap">
@@ -171,11 +197,17 @@ class Instamojo_Settings_Page
           break;
 
         case 'shortcode':
-          // Create new instance to interact with Instamojo API
-          $instamojo = new Instamojo(APPLICATION_ID);
-          $instamojo->setAuthToken($auth_token);
-          $offerObject = $instamojo->listAllOffers();
-          $offers = $offerObject['offers'];
+          if (!$auth_token)
+          {
+            echo '<p>You need to authenticate your account first to use this feature.</p>';
+          }
+          else
+          {
+            // Create new instance to interact with Instamojo API
+            $instamojo = new Instamojo(APPLICATION_ID);
+            $instamojo->setAuthToken($auth_token);
+            $offerObject = $instamojo->listAllOffers();
+            $offers = $offerObject['offers'];
       ?>
       <form method="" action="" id="instamojo-shortcode-generate">
         <table class="form-table">
@@ -260,6 +292,7 @@ class Instamojo_Settings_Page
         });
       </script>
       <?php
+          }
           break;
 
         default:
