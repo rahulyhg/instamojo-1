@@ -1,7 +1,7 @@
 <?php
 
-include_once(__DIR__.'/constants.php');
-include_once(__DIR__.'/lib/Instamojo.php');
+include_once(dirname(__FILE__).'/constants.php');
+include_once(dirname(__FILE__).'/lib/Instamojo.php');
 
 /**
  * Instamojo Settings Page
