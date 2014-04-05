@@ -15,6 +15,7 @@ class Instamojo_Settings_Page
     add_action('admin_menu', array($this, 'add_plugin_page'));
     add_action('admin_init', array($this, 'page_init'));
     add_action('admin_notices', array($this, 'plugin_notices'));
+    add_action('load-settings_page_instamojo', array($this, 'add_contextual_help'));
   }
 
   // Responsible for adding the setting link to the WordPress menu list
@@ -38,6 +39,31 @@ class Instamojo_Settings_Page
     );
   }
 
+  // Add contextual help to the plugin page
+  public function add_contextual_help()
+  {
+    $screen = get_current_screen();
+
+    $screen->add_help_tab(array(
+      'id' => 'getting-started',
+      'title' => __('Getting Started'),
+      'content' => '<p>'.__('To use this plugin, you require an <a href="https://www.instamojo.com/accounts/register/" target="_new">Instamojo account</a>.').'</p><p>'.__('If you already have an account with Instamojo and have created offers there, then you can authenticate you account by filling up the credentials. Enter your Instamojo Username and Password, and then click the <b>Authenticate</b> button.').'</p>'
+    ));
+    $screen->add_help_tab(array(
+      'id' => 'usage',
+      'title' => __('Usage'),
+      'content' => '<p>'.__('After authenticating your account, you can now use the Instamojo Widget which is available from <b>Appearance > Widgets</b>.').'</p><p>You can also use the shortcode generator available in the options page. This shortcode can be used to embed buttons into posts and pages.</p>'
+    ));
+    $screen->add_help_tab(array(
+      'id' => 'revoke',
+      'title' => __('Revoking your token'),
+      'content' => '<p>'.__('If you do not wish to use the plugin anymore and wish to revoke your token associated with this application, you can click the <b>Revoke Token</b> button.').'</p>'
+    ));
+
+    $screen->set_help_sidebar('<ul><li><a href="https://www.instamojo.com" target="_new">Instamojo Website</a><li><li><a href="https://www.instamojo.com/developers" target="_new">Instamojo API</a><li></ul>');
+  }
+
+  // Notices generated to help the user
   public function plugin_notices()
   {
     // Retrieve all stored options from the database
