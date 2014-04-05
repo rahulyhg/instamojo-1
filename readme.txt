@@ -39,8 +39,19 @@ This section describes how to install the plugin and get it working.
 
 Once the plugin is installed and activated, you will be able to access a new menu under settings called Instamojo.
 
-**How to use the plugin?**
+= How to use the plugin? =
 
 1. First you need to authenticate yourself using your Instamojo username and password.
 2. You will now be able to use the widget provided with this plugin.
 3. In case you wish to use your button in a page/post, you can generate a shortcode from the Instamojo Settings and use the same.
+
+== Changelog ==
+
+= 1.0.0 =
+* Uses Instamojo API to authenticate users and retrieve their offers
+* Shortcode generator provided for easy offer embedding into posts/pages
+* Widget allowing user to select offer, button style and button text for adding offer embed to sidebars
+* Allows revoking of authentication token and changing authenticated account
+
+= 0.1.0 =
+* Provides simple interface to enter your offer URL and embed a button as a widget
