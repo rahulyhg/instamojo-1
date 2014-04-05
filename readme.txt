@@ -2,9 +2,9 @@
 Contributors: rishimukherjee, aniketpant, instamojo
 Donate link: https://www.instamojo.com
 Tags: commerce, e-commerce, ecommerce, online store, sell digital downloads, sell online, shop, store, wordpress ecommerce, WordPress shopping cart, sell event tickets, sell subscriptions, sell memberships, sell physical goods, payments, easy payments, payments button, widget
-Requires at least: 3.0.1
-Tested up to: 3.4
-Stable tag: 4.3
+Requires at least: 3.3
+Tested up to: 4.3
+Stable tag: 0.1.0
 License: MIT
 License URI: http://opensource.org/licenses/MIT
 
