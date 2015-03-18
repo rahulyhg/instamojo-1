@@ -4,7 +4,7 @@
  * Plugin Name: Instamojo button
  * Plugin URI: https://www.instamojo.com
  * Description: Embed your Instamojo items directly into your WordPress site.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: Instamojo
  * Author URI: https://www.instamojo.com
  */
@@ -12,7 +12,7 @@
 if(!defined('ABSPATH'))
   exit;
 
-define('PLUGIN_VERSION', '0.1.0');
+define('PLUGIN_VERSION', '1.0.1');
 define('PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('PLUGIN_URL', plugin_dir_url(__FILE__));
 define('PLUGIN_NAME', 'INSTAMOJO');
